@@ -1,26 +1,57 @@
 const { createApp } = Vue;
 
-
 createApp({
+    
     data() {
         return {
-            apiGames: "https://api.rawg.io/api/",
-            apiCategoryGames:"games",
-            keyApi:"?key=fd4311dda6f7475eb6746b35ba928a6c",
-            games: []
-
-        };
-    },
-    methods: {
+            apiUrl: "api.php",
+            todoList: [],
+            todoCheckList:[],
+            newTask: ""
+        }
     },
     mounted() {
-        axios.get(this.apiGames + this.apiCategoryGames + this.keyApi)
-        .then(response=> {
-            this.games = response.data.results;
-            console.log(this.games);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        this.getDati();
+    },
+    methods: {
+        getDati() {
+            //Faccio una chiamata ad un API specificata nel data
+            axios.get(this.apiUrl).then((response) => {
+                console.log("Dati ricevuti: ", response.data);
+                this.todoList = response.data;
+            })
+            .catch(error => {
+                console.error('Error: ' + error);
+            })
+        },
+        sendData(data) {
+            //Faccio una chiamata POST ad apiUrl, passando il data
+            axios.post(this.apiUrl, data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            .then((response) => {
+                this.todoList = response.data;
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        },
+        addNewTask() {
+            const data = { newTask: this.newTask };
+
+            this.sendData(data);
+        },
+        checkList(i) {
+            const data = { checkList: i };
+            
+            this.sendData(data);
+        },
+        deleteTask(i) {
+            console.log(i);
+            const data = { deleteTask: i };
+    
+            this.sendData(data);
+        },
     }
+
 }).mount("#app");
