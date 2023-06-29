@@ -1,7 +1,8 @@
+//ISTANZIO L' APP VUE
 const { createApp } = Vue;
 
 createApp({
-    
+    //DATA
     data() {
         return {
             apiUrl: "api.php",
@@ -10,9 +11,11 @@ createApp({
             newTask: ""
         }
     },
+    //MOUNTED
     mounted() {
         this.getDati();
     },
+    //METHODS
     methods: {
         getDati() {
             //Faccio una chiamata ad un API specificata nel data
@@ -40,6 +43,7 @@ createApp({
             const data = { newTask: this.newTask };
 
             this.sendData(data);
+            this.newTask = "";
         },
         checkList(i) {
             const data = { checkList: i };
@@ -53,5 +57,5 @@ createApp({
             this.sendData(data);
         },
     }
-
+//MOUNT APP
 }).mount("#app");
